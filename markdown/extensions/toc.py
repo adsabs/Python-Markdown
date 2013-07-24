@@ -91,10 +91,11 @@ class TocTreeprocessor(Treeprocessor):
     def add_anchor(self, c, elem_id): #@ReservedAssignment
         if self.use_anchors:
             anchor = etree.Element("a")
-            anchor.text = c.text
             anchor.attrib["href"] = "#" + elem_id
             anchor.attrib["class"] = "toclink"
-            c.text = ""
+            if self.anchor_wraps_text:
+                anchor.text = c.text
+                c.text = ""
             for elem in c.getchildren():
                 anchor.append(elem)
                 c.remove(elem)
@@ -128,6 +129,7 @@ class TocTreeprocessor(Treeprocessor):
         header_rgx = re.compile("[Hh][123456]")
         
         self.use_anchors = self.config["anchorlink"] in [1, '1', True, 'True', 'true']
+        self.anchor_wraps_text = not self.config["anchor_wraps_text"] in [0, '0', False, 'False', 'false']
         
         # Get a list of id attributes
         used_ids = set()
@@ -200,8 +202,12 @@ class TocExtension(Extension):
                             "Title to insert into TOC <div> - "
                             "Defaults to None"],
                         "anchorlink" : [0,
-                            "1 if header should be a self link"
-                            "Defaults to 0"]}
+                            "1 if header should be a self link - "
+                            "Defaults to 0"],
+                        "anchor_wraps_text" : [1,
+                            "0 to generate empty anchors - "
+                            "Defaults to 1"]}
+
 
         for key, value in configs:
             self.setConfig(key, value)

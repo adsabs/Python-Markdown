@@ -56,8 +56,12 @@ The following options are provided to configure the output:
   contains the text content of the header and return a string which will be 
   used as the anchor text.
 * **title**: Title to insert in TOC ``<div>``. Defaults to ``None``.
-* **anchorlink**: Set to ``True`` to have the headers link to themselves. 
+* **anchorlink**: Set to ``True`` to generate anchor tags for each header element. 
   Default is ``False``.
+* **anchor_wraps_text**: Set to ``False`` to create empty anchor tags rather than
+  have the header text wrapped by the generated anchor tags. i.e., if ``True``, 
+  headers link to themselves. Only makes sense if **anchorlink** is ``True``.
+  Default is ``True``.
 
 If a 'marker' is not found in the document, then the toc is available as an
 attribute of the Markdown class. This allows one to insert the toc elsewhere 
